@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 
@@ -13,8 +14,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer 
 {
-    // private TalonFX motor = new TalonFX(44);
-    private CANSparkMax motor = new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
+    private TalonFX motor = new TalonFX(1);
+    // private CANSparkMax motor = new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
     private CommandXboxController xbox = new CommandXboxController(0);
 
     public RobotContainer() 
@@ -25,8 +26,10 @@ public class RobotContainer
     private void configureBindings() 
     {
         xbox.a()
-            .onTrue( Commands.run( () -> motor.set(0.1) ) )
-            .onFalse( Commands.run( () -> motor.set(0.0) ) );
+            .whileTrue( Commands.runEnd( 
+                () -> motor.set(0.1),
+                () -> motor.set(0.0) 
+            ) );
     }
 
     public Command getAutonomousCommand() 
@@ -34,8 +37,13 @@ public class RobotContainer
         return Commands.print("No autonomous command configured");
     }
 
-    public CANSparkMax getMotor()
+    public TalonFX getMotor()
     {
         return motor;
     }
+
+    // public CANSparkMax getMotor()
+    // {
+    //     return motor;
+    // }
 }

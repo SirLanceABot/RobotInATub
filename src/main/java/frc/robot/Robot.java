@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -16,7 +17,8 @@ public class Robot extends TimedRobot
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
-    private CANSparkMax motor;
+    private TalonFX motor;
+    // private CANSparkMax motor;
 
     @Override
     public void robotInit() 
