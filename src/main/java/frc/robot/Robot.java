@@ -64,7 +64,10 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousExit() 
     {
-        Commands.run( () -> motor.set(0.0) ).schedule();
+        Commands.runEnd( 
+            () -> motor.set(0.0), 
+            () -> motor.set(0.0) 
+        ).schedule();
     }
 
     @Override
