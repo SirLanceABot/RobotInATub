@@ -54,7 +54,10 @@ public class Robot extends TimedRobot
         // {
         //     m_autonomousCommand.schedule();
         // }
-        Commands.run( () -> motor.set(0.1) ).schedule();
+        Commands.runEnd( 
+            () -> motor.set(0.1), 
+            () -> motor.set(0.0) 
+        ).schedule();
     }
 
     @Override
@@ -63,12 +66,7 @@ public class Robot extends TimedRobot
 
     @Override
     public void autonomousExit() 
-    {
-        Commands.runEnd( 
-            () -> motor.set(0.0), 
-            () -> motor.set(0.0) 
-        ).schedule();
-    }
+    {}
 
     @Override
     public void teleopInit() 
