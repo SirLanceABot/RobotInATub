@@ -4,27 +4,22 @@
 
 package frc.robot;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.MyCommands;
+import frc.robot.controls.TriggerBindings;
 
 public class Robot extends TimedRobot 
 {
-    private Command m_autonomousCommand;
+    private Command autonomousCommand = null;
+    private final RobotContainer robotContainer = new RobotContainer();
 
-    private RobotContainer m_robotContainer;
-    private TalonFX motor;
-    // private CANSparkMax motor;
-
-    @Override
-    public void robotInit() 
+    public Robot()
     {
-        m_robotContainer = new RobotContainer();
-        motor = m_robotContainer.getMotor();
+        System.out.println("J Wood");
+        MyCommands.createMyCommands(robotContainer);
+        TriggerBindings.createBindings(robotContainer);
     }
 
     @Override
@@ -48,16 +43,12 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit() 
     {
-        // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        autonomousCommand = MyCommands.autonomousCommand();
 
-        // if (m_autonomousCommand != null) 
-        // {
-        //     m_autonomousCommand.schedule();
-        // }
-        Commands.runEnd( 
-            () -> motor.set(0.1), 
-            () -> motor.set(0.0) 
-        ).schedule();
+        if (autonomousCommand != null) 
+        {
+            autonomousCommand.schedule();
+        }
     }
 
     @Override
@@ -66,15 +57,22 @@ public class Robot extends TimedRobot
 
     @Override
     public void autonomousExit() 
-    {}
+    {
+        // if (autonomousCommand != null) 
+        // {
+        //     autonomousCommand.cancel();
+        //     autonomousCommand = null;
+        // }
+    }
 
     @Override
     public void teleopInit() 
     {
-        if (m_autonomousCommand != null) 
+        if (autonomousCommand != null) 
         {
-            m_autonomousCommand.cancel();
-        }
+            autonomousCommand.cancel();
+            autonomousCommand = null;
+        }        
     }
 
     @Override
